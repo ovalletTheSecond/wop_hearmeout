@@ -8,11 +8,6 @@ use App\Models\Crush;
 
 class AccountController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $crush = auth()->user()->crush;
