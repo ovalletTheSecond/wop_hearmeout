@@ -10,12 +10,20 @@ class AccountController extends Controller
 {
     public function index()
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+        
         $crush = auth()->user()->crush;
         return view('account.index', compact('crush'));
     }
 
     public function store(Request $request)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+        
         // Check if user already has a crush
         if (auth()->user()->crush) {
             return back()->withErrors(['error' => 'Vous avez déjà un crush.']);
@@ -44,6 +52,10 @@ class AccountController extends Controller
 
     public function update(Request $request)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+        
         $crush = auth()->user()->crush;
 
         if (!$crush) {
@@ -89,6 +101,10 @@ class AccountController extends Controller
 
     public function destroy()
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+        
         $crush = auth()->user()->crush;
 
         if (!$crush) {

@@ -10,6 +10,10 @@ class CommentController extends Controller
 {
     public function store(Request $request)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+        
         $validated = $request->validate([
             'crush_id' => 'required|exists:crushes,id',
             'text' => 'required|string|max:1000',
@@ -26,6 +30,10 @@ class CommentController extends Controller
 
     public function react(Request $request)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+        
         $validated = $request->validate([
             'comment_id' => 'required|exists:comments,id',
             'type' => 'required|in:like,dislike',
