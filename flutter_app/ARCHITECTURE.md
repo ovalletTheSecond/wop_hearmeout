@@ -219,7 +219,7 @@
 │      "imageUrl": "https://...",                      │
 │      "ingredientsText": "farine, eau...",            │
 │      "detectedInsectIngredients": [],                │
-│      "scanDate": "2025-10-30T12:00:00.000Z"         │
+│      "scanDate": "2024-10-30T12:00:00.000Z"         │
 │    },                                                 │
 │    ...                                                │
 │  ]                                                    │
