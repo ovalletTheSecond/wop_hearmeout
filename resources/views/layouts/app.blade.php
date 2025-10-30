@@ -61,6 +61,59 @@
             opacity: 0.8;
         }
 
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dropdown-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            z-index: 1000;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #2c3e50;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+            opacity: 1;
+        }
+
         main {
             flex: 1;
             max-width: 1200px;
@@ -197,6 +250,24 @@
         <nav>
             <h1><a href="/">Hear Me Out</a></h1>
             <ul>
+                <li class="dropdown">
+                    <button class="dropdown-toggle" onclick="toggleDropdown()">
+                        Catégories ▾
+                    </button>
+                    <div class="dropdown-menu" id="categoryDropdown">
+                        @php
+                            $categories = \App\Models\Category::orderBy('name')->get();
+                        @endphp
+                        <a href="{{ route('home') }}">
+                            Toutes les catégories
+                        </a>
+                        @foreach($categories as $category)
+                            <a href="{{ route('home', ['category' => $category->slug]) }}">
+                                {{ $category->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </li>
                 @auth
                     <li><a href="{{ route('account') }}">Mon Crush</a></li>
                     <li><a href="{{ route('logout') }}">Déconnexion</a></li>
@@ -206,6 +277,25 @@
             </ul>
         </nav>
     </header>
+
+    <script>
+        function toggleDropdown() {
+            document.getElementById('categoryDropdown').classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropdown-toggle')) {
+                var dropdowns = document.getElementsByClassName('dropdown-menu');
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
 
     <main>
         @if(session('success'))
@@ -219,8 +309,30 @@
         @yield('content')
     </main>
 
-    <footer>
-        <p>&copy; 2025 Hear Me Out. Tous droits réservés.</p>
+    <footer style="background: #f8f9fa; padding: 2rem 0; margin-top: auto;">
+        <div style="max-width: 800px; margin: 0 auto; padding: 0 1rem; text-align: center;">
+            <div style="margin-bottom: 2rem;">
+                <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">
+                    S'il vous plaît, utilisez ce site de manière respectueuse. La création de multiples comptes dans le but de DDOS
+                    entraînera la fermeture du site. Si vous souhaitez refaire un site similaire, faites-le, mais évitez
+                    de compromettre cette plateforme pour tous.
+                </p>
+            </div>
+            
+            <div style="margin-bottom: 2rem;">
+                <a href="{{ route('support') }}"  style="display: inline-block; padding: 0.5rem 1rem;  color: black; text-decoration: underline; border-radius: 4px;">
+                    Me soutenir 
+                </a>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <a href="mailto:oli.vallet0+hearmeout@gmail.com?subject=Demande%20de%20suppression%20RGPD" style="color: #666; text-decoration: underline;">
+                    RGPD - Demander la suppression de mon compte
+                </a>
+            </div>
+            
+            <p style="color: #666;">&copy; 2025 Hear Me Out. Tous droits réservés.</p>
+        </div>
     </footer>
 
     @stack('scripts')

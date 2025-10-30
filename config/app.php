@@ -43,6 +43,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Development Mode
+    |--------------------------------------------------------------------------
+    |
+    | This value determines whether the application is running in development mode.
+    | In development mode, all crushes will be shown regardless of whether they've
+    | been seen before.
+    |
+    */
+
+    'dev_mode' => (bool) env('APP_DEV_MODE', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application URL
     |--------------------------------------------------------------------------
     |

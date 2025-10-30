@@ -16,13 +16,22 @@ class CommentController extends Controller
         
         $validated = $request->validate([
             'crush_id' => 'required|exists:crushes,id',
-            'text' => 'required|string|max:1000',
+            'text' => 'required|string|max:' . config('content.comment.max', 500) . '|min:1',
         ]);
+
+        // Check if user already commented on this crush
+        $existingComment = Comment::where('crush_id', $validated['crush_id'])
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($existingComment) {
+            return back()->with('error', 'Vous avez déjà commenté ce crush.');
+        }
 
         Comment::create([
             'crush_id' => $validated['crush_id'],
             'user_id' => auth()->id(),
-            'text' => $validated['text'],
+            'text' => strip_tags($validated['text']),
         ]);
 
         return back()->with('success', 'Commentaire ajouté avec succès!');

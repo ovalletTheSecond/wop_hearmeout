@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Crush;
+use App\Models\Category;
+use App\Http\Requests\StoreCrushRequest;
 
 class AccountController extends Controller
 {
@@ -15,37 +17,36 @@ class AccountController extends Controller
         }
         
         $crush = auth()->user()->crush;
-        return view('account.index', compact('crush'));
+        $categories = Category::orderBy('name')->get();
+        return view('account.index', compact('crush', 'categories'));
     }
 
-    public function store(Request $request)
+    public function store(StoreCrushRequest $request)
     {
-        if (!auth()->check()) {
-            return redirect()->route('login');
-        }
-        
-        // Check if user already has a crush
-        if (auth()->user()->crush) {
-            return back()->withErrors(['error' => 'Vous avez déjà un crush.']);
-        }
-
-        $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
-            'text' => 'required|string',
-            'image' => 'nullable|image|max:10240',
-        ]);
+        // Validation déjà gérée par StoreCrushRequest
+        $validated = $request->validated();
 
         $crushData = [
             'user_id' => auth()->id(),
-            'title' => $validated['title'],
-            'text' => $validated['text'],
+            'title' => strip_tags($validated['title'] ?? ''),
+            'text' => strip_tags($validated['text']),
+            'category_id' => $validated['category_id'] ?? null,
         ];
 
         if ($request->hasFile('image')) {
-            $crushData['image_path'] = $request->file('image')->store('crushes', 'public');
+            $image = $request->file('image');
+            
+            // Sécurité : générer un nom de fichier unique et sécurisé
+            $filename = uniqid() . '_' . time() . '.' . $image->getClientOriginalExtension();
+            $crushData['image_path'] = $image->storeAs('crushes', $filename, 'public');
         }
 
-        Crush::create($crushData);
+        $crush = Crush::create($crushData);
+
+        // Attach multiple categories
+        if (!empty($validated['categories'])) {
+            $crush->categories()->attach($validated['categories']);
+        }
 
         return back()->with('success', 'Crush créé avec succès!');
     }
@@ -63,20 +64,20 @@ class AccountController extends Controller
         }
 
         $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
-            'text' => 'required|string',
-            'image' => 'nullable|image|max:10240',
+            'title' => 'nullable|string|max:' . config('content.crush.title_max', 100),
+            'text' => 'required|string|max:' . config('content.crush.text_max', 1000),
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:' . (config('content.crush.image_max_mb', 3) * 1024) . '|dimensions:max_width=4096,max_height=4096',
         ]);
 
         $updateData = [
-            'text' => $validated['text'],
+            'text' => strip_tags($validated['text']),
         ];
 
         // Check if title or image changed (reset stats)
         $resetStats = false;
 
         if ($request->input('title') !== $crush->title) {
-            $updateData['title'] = $validated['title'];
+            $updateData['title'] = strip_tags($validated['title'] ?? '');
             $resetStats = true;
         }
 
@@ -85,7 +86,10 @@ class AccountController extends Controller
             if ($crush->image_path) {
                 Storage::disk('public')->delete($crush->image_path);
             }
-            $updateData['image_path'] = $request->file('image')->store('crushes', 'public');
+            
+            $image = $request->file('image');
+            $filename = uniqid() . '_' . time() . '.' . $image->getClientOriginalExtension();
+            $updateData['image_path'] = $image->storeAs('crushes', $filename, 'public');
             $resetStats = true;
         }
 

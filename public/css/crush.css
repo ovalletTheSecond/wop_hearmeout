@@ -1,0 +1,244 @@
+.crush-container {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.crush-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.crush-image-container {
+    aspect-ratio: 1;
+    position: relative;
+    margin: 2rem auto;
+    max-width: 500px;
+    width: 100%;
+}
+
+.crush-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.drag-drop-zone {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 3px dashed #cbd5e1;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.drag-drop-zone:hover {
+    border-color: #94a3b8;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    transform: translateY(-2px);
+}
+
+.drag-drop-zone .plus-icon {
+    font-size: 56px;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    transition: all 0.3s ease;
+    line-height: 1;
+}
+
+.drag-drop-zone:hover .plus-icon {
+    color: #475569;
+    transform: scale(1.1);
+}
+
+.drag-drop-zone .upload-text {
+    color: #64748b;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.drag-drop-zone .upload-text small {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.drag-drop-zone:hover .upload-text {
+    color: #475569;
+}
+
+.drag-drop-zone.drag-over {
+    border-color: #10b981;
+    border-style: solid;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    box-shadow: 0 8px 16px rgba(16, 185, 129, 0.15);
+    transform: scale(1.02);
+}
+
+.drag-drop-zone.drag-over .plus-icon {
+    color: #10b981;
+    transform: scale(1.15) rotate(90deg);
+}
+
+.drag-drop-zone.drag-over .upload-text {
+    color: #059669;
+}
+
+.drag-drop-zone.drag-over .upload-text small {
+    color: #10b981;
+}
+
+.crush-title {
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 1rem;
+        border-radius: 4px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 1rem 1rem 0;
+    }
+    
+.vote-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+}
+
+.vote-btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+    max-width: 150px;
+}
+
+.vote-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.next-crush-btn {
+    position: absolute;
+    right: -80px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #3498db;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.next-crush-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
+}
+
+.notification-bell {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.notification-bell.has-notifications::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 12px;
+    height: 12px;
+    background: #e74c3c;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.notifications-panel {
+    position: fixed;
+    top: 60px;
+    right: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+}
+
+.notifications-panel.show {
+    display: block;
+}
+
+.notification-item {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+/* Styles pour mobile */
+@media (max-width: 768px) {
+    .crush-container {
+        margin: 0 1rem;
+    }
+
+    .next-crush-btn {
+        display: none; /* Caché sur mobile car on utilise le swipe */
+    }
+
+    .vote-buttons {
+        padding: 1rem;
+    }
+
+    .vote-btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+}
