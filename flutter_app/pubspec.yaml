@@ -1,0 +1,51 @@
+name: scan_clean_food
+description: "Application mobile Android pour détecter les ingrédients d'origine insecte dans les produits alimentaires"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Scanner de code-barres
+  mobile_scanner: ^5.2.3
+  
+  # Gestion d'état
+  provider: ^6.1.2
+  
+  # Requêtes HTTP
+  http: ^1.2.2
+  
+  # Stockage local
+  shared_preferences: ^2.3.2
+  
+  # Permission handler
+  permission_handler: ^11.3.1
+  
+  # Icônes Material
+  cupertino_icons: ^1.0.8
+  
+  # Date formatting
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # Assets
+  # assets:
+  #   - assets/images/
+
+  # Fonts
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
